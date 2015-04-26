@@ -8,7 +8,7 @@
 
 1. Add pravangi to your `Gemfile`.
 
-    `gem 'pravangi'
+    `gem 'pravangi'`
 
 2. Generate a migration which will add a `pending_approvals` table to your database.
 
@@ -31,12 +31,24 @@ end
 
 # check if this object requires any approval?
 article.pending_approval?
-
+```
 
 ## Contributing
+In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality.
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+**You get extra attention, if your PR includes specs/tests.**
+
+1. Fork or clone the project.
+2. Create your feature branch (`$ git checkout -b my-new-feature`)
+3. Install the dependencies by doing: `$ bundle install` in the project directory.
+4. Add your bug fixes or new feature code.
+    - New features should include new specs/tests. 
+    - Bug fixes should ideally include exposing specs/tests.
+5. Commit your changes (`$ git commit -am 'Add some feature'`)
+6. Push to the branch (`$ git push origin my-new-feature`)
+7. Open your Pull Request!
+
+
+## License
+Copyright (c) 2013 Jasdeep Singh (Metaware Labs Inc)  
+Licensed under the MIT license.
