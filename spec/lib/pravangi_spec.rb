@@ -39,7 +39,7 @@ describe Pravangi do
     end
 
     it 'should not have any pending approvals' do
-      expect(post.pending_approval).to be_nil
+      expect(post.pending_approvals).to be_empty
     end
 
   end
@@ -65,11 +65,50 @@ describe Pravangi do
 
       it 'saves a single record that contains pending changes' do
         expect(post.title).to eq('metaware')
-        expect(post.pending_approval).to be_present
+        expect(post.pending_approvals).to be_present
       end
 
       it 'should return true when approval is required' do
         expect(post.pending_approval?).to eq(true)
+      end
+
+      context 'object_changes' do
+        
+        it 'should populate object_changes column' do
+          expect(post.pending_approvals.last.object_changes).to be_present
+        end
+
+        it 'should be of type hash' do
+          expect(post.pending_approvals.last.object_changes).to be_a(Hash)
+        end
+
+        it 'should contain the attributes that changed' do
+          expect(post.pending_approvals.last.object_changes).to include('title', 'updated_at')
+        end
+
+      end
+
+      context 'raw_object' do
+        
+        it 'should populate serialized_object column' do
+          expect(post.pending_approvals.last.raw_object).to be_present
+        end
+
+
+        context 'serialized raw object' do
+
+          let(:serialized_object) { YAML.load(post.pending_approvals.last.raw_object) }
+
+          it 'should be able to serialize raw_object back to object' do
+            expect(serialized_object).to be_a(Post)
+          end
+
+          it 'should have the correct (new) attributes' do
+            expect(serialized_object.title).to eq('metaware')
+          end
+
+        end
+
       end
       
     end

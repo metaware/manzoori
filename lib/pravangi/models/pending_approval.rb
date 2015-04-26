@@ -5,5 +5,7 @@ module Pravangi
 
     belongs_to :resource, polymorphic: true
 
+    serialize :object_changes, Hash
+
   end
 end

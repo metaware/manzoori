@@ -17,7 +17,7 @@ module Pravangi
 
         before_update :track_approval, if: options[:if]
 
-        has_one :pending_approval, 
+        has_many :pending_approvals, 
           class_name: 'Pravangi::PendingApproval',
           as: :resource
       end
@@ -27,12 +27,15 @@ module Pravangi
     def track_approval
       warn('Pravangi: The record cannot be updated, because it requires approval.')
       if changed?
-        build_pending_approval(object_changes: self.reload.to_yaml).save
+        pending_approvals.build(
+          object_changes: self.changes,
+          raw_object: self.reload.to_yaml
+          ).save
       end
     end
 
     def pending_approval?
-      pending_approval.present?
+      pending_approvals.present?
     end
 
   end
