@@ -50,5 +50,6 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 
 ## License
-Copyright (c) 2013 Jasdeep Singh (Metaware Labs Inc)  
+Copyright (c) 2013 [Jasdeep Singh](http://jasdeep.ca) ([Metaware Labs Inc](http://metawarelabs.com/))
+
 Licensed under the MIT license.
