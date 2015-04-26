@@ -1,3 +1,5 @@
+require 'active_record'
+
 module Pravangi
   class PendingApproval < ::ActiveRecord::Base
 

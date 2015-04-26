@@ -38,6 +38,10 @@ describe Pravangi do
       expect(post.title).to eq('metaware')
     end
 
+    it 'should not have any pending approvals' do
+      expect(post.pending_approval).to be_nil
+    end
+
   end
 
   context 'existing record' do
@@ -50,32 +54,40 @@ describe Pravangi do
 
     context 'requires approval' do
 
-      it 'doesnt update or change the record that requires approval' do
+      before(:each) do
         post.save
         post.reload
+      end
 
+      it 'doesnt update or change the record that requires approval' do
         expect(post.title).to eq('metaware')
       end
 
       it 'saves a single record that contains pending changes' do
-        post.save
-        post.reload
-
         expect(post.title).to eq('metaware')
-        expect(post.pending_approvals).to be_present
+        expect(post.pending_approval).to be_present
+      end
+
+      it 'should return true when approval is required' do
+        expect(post.pending_approval?).to eq(true)
       end
       
     end
 
     context 'does not requires approval' do
 
-      it 'should not stage changes when if condition is not satisfied' do
+      before(:each) do
         expect(post).to receive(:approved?).and_return(false)
-        
         post.save
         post.reload
+      end
 
+      it 'should just commit the changes' do
         expect(post.title).to eq('new metaware')
+      end
+
+      it 'should return false when approval is not required' do
+        expect(post.pending_approval?).to eq(false)
       end
 
     end
