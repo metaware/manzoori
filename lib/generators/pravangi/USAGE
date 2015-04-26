@@ -1,0 +1,2 @@
+Description:
+  Generates a migration file to add approval_versions table.

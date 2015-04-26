@@ -23,6 +23,7 @@ tmp
 /test/tmp/
 /test/version_tmp/
 /tmp/
+spec/support/db.sqlite
 
 ## Specific to RubyMotion:
 .dat*
