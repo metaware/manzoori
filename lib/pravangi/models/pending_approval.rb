@@ -15,13 +15,17 @@ module Pravangi
       self.object_changes.keys
     end
 
-    def commit
+    def approve_changes
       resource.skip_approval = true
       object_changes.each do |k,v|
         resource[k] = v[1]
       end
       resource.save
       resource.reload
+    end
+
+    def reject_changes
+      self.destroy
     end
 
     def skip_attributes

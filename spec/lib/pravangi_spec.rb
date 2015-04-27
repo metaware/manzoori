@@ -134,7 +134,7 @@ describe Pravangi do
       end
 
       it 'should be able to apply all changes to bring the object to desired state' do
-        post.pending_approvals.each(&:commit)
+        post.pending_approvals.each(&:approve_changes)
         post.reload
         expect(post.title).to eq('metaware 3')
       end
@@ -161,7 +161,7 @@ describe Pravangi do
 
     end
 
-    context '#commit' do
+    context '#approve_changes' do
 
       before(:each) do
         post.title = 'metaware 2'
@@ -170,9 +170,32 @@ describe Pravangi do
       end
 
       it 'should be able to revert the object back to the requested state' do
-        post.pending_approvals.last.commit
+        post.pending_approvals.last.approve_changes
         post.reload
         expect(post.title).to eq('metaware 2')
+      end
+
+    end
+
+    context '#reject_changes' do
+
+      before(:each) do
+        post.title = 'metaware 2'
+        post.save
+        post.reload
+      end
+
+      it 'should be able to revert the object back to the requested state' do
+        post.pending_approvals.last.reject_changes
+        post.reload
+        expect(post.title).to eq('metaware')
+      end
+
+      it 'should clear any pending approvals in the queue' do
+        post.pending_approvals.last.reject_changes
+        post.reload
+        expect(post.pending_approval?).to eq(false)
+        expect(post.pending_approvals).to be_empty
       end
 
     end
@@ -193,21 +216,6 @@ describe Pravangi do
         expect(post.pending_approval?).to eq(false)
       end
 
-    end
-
-  end
-
-  context 'when taking an object to satisfying if condition' do
-
-    let(:post) { Post.create(title: 'metaware', state: 'draft') }
-
-    it 'should trigger approval tracking only when the object is in a satisfying state' do
-      skip('the following is a failing test case, however not an immediate concern as we are doing state change as an isolated action on our objects')
-      # post.title = 'metaware draft'
-      # post.state = 'approved'
-      # post.save
-      # post.reload
-      # expect(post.title).to eq('metaware draft')
     end
 
   end
