@@ -58,5 +58,15 @@ module Pravangi
       pending_approvals.present?
     end
 
+    def approve_pending_changes
+      self.pending_approvals.each(&:approve_changes)
+      self.reload
+    end
+
+    def reject_pending_changes
+      self.pending_approvals.each(&:reject_changes)
+      self.reload
+    end
+
   end
 end

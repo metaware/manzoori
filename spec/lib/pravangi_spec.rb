@@ -243,4 +243,46 @@ describe Pravangi do
 
   end
 
+  context 'approval queue is cleared after accepting changes' do
+
+    let(:post) { Post.create(title: 'metaware', state: 'approved') }
+
+    before(:each) do
+      post.title = 'metaware 2'
+      post.save
+      post.title = 'metaware 3'
+      post.save
+      post.reload
+    end
+
+    it 'should clear approval queue after accepting changes' do
+      expect(post.pending_approvals.count).to eq(2)
+      post.approve_pending_changes
+      expect(post.pending_approvals.count).to eq(0)
+      expect(post.pending_approval?).to eq(false)
+    end
+
+  end
+
+  context 'approval queue is cleared after rejecting changes' do
+
+    let(:post) { Post.create(title: 'metaware', state: 'approved') }
+
+    before(:each) do
+      post.title = 'metaware 2'
+      post.save
+      post.title = 'metaware 3'
+      post.save
+      post.reload
+    end
+
+    it 'should clear approval queue after accepting changes' do
+      expect(post.pending_approvals.count).to eq(2)
+      post.reject_pending_changes
+      expect(post.pending_approvals.count).to eq(0)
+      expect(post.pending_approval?).to eq(false)
+    end
+
+  end
+
 end

@@ -7,6 +7,8 @@ module Pravangi
     serialize :object_changes, Hash
     before_save :skip_attributes
 
+    default_scope { where(is_approved: false, is_rejected: false) }
+
     def as_object
       @object ||= YAML.load(raw_object)
     end
@@ -16,16 +18,19 @@ module Pravangi
     end
 
     def approve_changes
-      resource.skip_approval = true
-      object_changes.each do |k,v|
-        resource[k] = v[1]
+      PendingApproval.transaction do
+        resource.skip_approval = true
+        object_changes.each do |k,v|
+          resource[k] = v[1]
+        end
+        self.update_attribute(:is_approved, true)
+        resource.save
+        resource.reload
       end
-      resource.save
-      resource.reload
     end
 
     def reject_changes
-      self.destroy
+      self.update_attribute(:is_rejected, true)
     end
 
     def skip_attributes
