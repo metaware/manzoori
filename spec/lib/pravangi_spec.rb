@@ -22,7 +22,7 @@ describe Pravangi do
     end
 
     class Post < ActiveRecord::Base
-      requires_approval if: :approved?
+      requires_approval if: :approved?, skip_attributes: :updated_at
 
       def approved?
         self.state == 'approved'
@@ -84,7 +84,7 @@ describe Pravangi do
         end
 
         it 'should be possible to find out what attributes changed' do
-          expect(post.pending_approvals.last.object_changes).to include('title', 'updated_at')
+          expect(post.pending_approvals.last.object_changes).to include('title')
         end
 
       end
@@ -208,6 +208,29 @@ describe Pravangi do
       # post.save
       # post.reload
       # expect(post.title).to eq('metaware draft')
+    end
+
+  end
+
+  context 'skip_attributes' do
+
+    let(:post) { Post.create(title: 'metaware', state: 'approved') }
+
+    it 'should allow the capability to skip certain attributes from the approval process' do
+      original_updated_at = post.updated_at
+      post.updated_at = post.updated_at + 1.hour
+      post.save
+      post.reload
+      expect(post.updated_at).to eq(original_updated_at + 1.hour)
+    end
+
+    it 'should not track the skipped attributes' do
+      post.title = 'metaware unapprovable'
+      post.updated_at = post.updated_at + 10.minutes
+      post.save
+      post.reload
+      expect(post.pending_approvals.last.object_changes).to include(:title)
+      expect(post.pending_approvals.last.object_changes).to_not include(:updated_at)
     end
 
   end

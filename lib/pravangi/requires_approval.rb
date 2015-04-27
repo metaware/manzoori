@@ -33,15 +33,24 @@ module Pravangi
 
     end
 
+    def pravangi_object_changes
+      self.changes.except(*self.class.pravangi_options[:skip_attributes])
+    end
+
     def track_approval
       warn('Pravangi: The record cannot be updated, because it requires approval.')
       if changed?
         original = self.clone
         original.pending_approvals.build(
-          object_changes: original.changes,
+          object_changes: original.pravangi_object_changes,
           raw_object: original.to_yaml
           ).save
         self.reload
+
+        skip_attributes = Array(self.class.pravangi_options[:skip_attributes])
+        skip_attributes.each do |attr|
+          self[attr] = original[attr]
+        end
       end
     end
 
