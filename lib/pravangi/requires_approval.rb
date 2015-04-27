@@ -60,11 +60,13 @@ module Pravangi
 
     def approve_pending_changes
       self.pending_approvals.each(&:approve_changes)
+      self.touch
       self.reload
     end
 
     def reject_pending_changes
       self.pending_approvals.each(&:reject_changes)
+      self.touch
       self.reload
     end
 
