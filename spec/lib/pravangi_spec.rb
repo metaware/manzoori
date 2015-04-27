@@ -133,6 +133,12 @@ describe Pravangi do
         expect(pending_approvals.last.as_object.title).to eq('metaware 3')
       end
 
+      it 'should be able to apply all changes to bring the object to desired state' do
+        post.pending_approvals.each(&:commit)
+        post.reload
+        expect(post.title).to eq('metaware 3')
+      end
+
     end
 
     context 'deserialized object' do

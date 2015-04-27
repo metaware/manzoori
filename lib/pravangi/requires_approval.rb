@@ -49,18 +49,5 @@ module Pravangi
       pending_approvals.present?
     end
 
-    def as_object
-      @object ||= YAML.load(raw_object)
-    end
-
-    def commit
-      resource.skip_approval = true
-      object_changes.each do |k,v|
-        resource[k] = v[1]
-      end
-      resource.save
-      resource.reload
-    end
-
   end
 end
