@@ -127,8 +127,9 @@ describe Pravangi do
       end
 
       it 'should recognize approvals in order' do
-        skip
-        # expect(post.pending_approvals.first).to eq(2)
+        pending_approvals = post.pending_approvals
+        expect(pending_approvals.first.as_object.title).to eq('metaware 2')
+        expect(pending_approvals.last.as_object.title).to eq('metaware 3')
       end
 
     end
