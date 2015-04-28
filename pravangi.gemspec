@@ -27,13 +27,13 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'activerecord'
 
   unless defined?(JRUBY_VERSION)
-    spec.add_dependency 'sqlite3'
-    spec.add_dependency 'mysql2'
-    spec.add_dependency 'pg'
+    spec.add_development_dependency 'sqlite3'
+    spec.add_development_dependency 'mysql2'
+    spec.add_development_dependency 'pg'
   else
-    spec.add_dependency 'activerecord-jdbcsqlite3-adapter'
-    spec.add_dependency 'activerecord-jdbcpostgresql-adapter'
-    spec.add_dependency 'activerecord-jdbcmysql-adapter'
+    spec.add_development_dependency 'activerecord-jdbcsqlite3-adapter'
+    spec.add_development_dependency 'activerecord-jdbcpostgresql-adapter'
+    spec.add_development_dependency 'activerecord-jdbcmysql-adapter'
   end
 
 end
