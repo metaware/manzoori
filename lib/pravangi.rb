@@ -1,4 +1,3 @@
-require 'pry'
 require 'pravangi/version'
 require 'pravangi/requires_approval'
 require 'pravangi/models/pending_approval'
