@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Pravangi do
+describe Manzoori do
 
   before(:all) do
 

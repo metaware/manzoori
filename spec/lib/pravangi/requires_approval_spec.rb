@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe Pravangi::Model do
+describe Manzoori::Model do
   
 end

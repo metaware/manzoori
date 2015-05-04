@@ -18,7 +18,7 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 require 'active_record'
-require 'pravangi'
+require 'manzoori'
 require 'generators/pravangi/templates/create_pending_approvals'
 
 RSpec.configure do |config|

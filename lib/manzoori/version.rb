@@ -1,3 +1,3 @@
-module Pravangi
+module Manzoori
   VERSION = "0.3.1"
 end

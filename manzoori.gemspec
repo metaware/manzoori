@@ -1,15 +1,15 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'pravangi/version'
+require 'manzoori/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "pravangi"
-  spec.version       = Pravangi::VERSION
+  spec.name          = "manzoori"
+  spec.version       = Manzoori::VERSION
   spec.authors       = ["Jasdeep Singh"]
   spec.email         = ["narang.jasdeep@gmail.com"]
-  spec.description   = %q{ਪ੍ਰਵਾਨਗੀ (pravangi) : Approval process for your models/domain objects without commiting the changes to the records}
-  spec.summary       = %q{ਪ੍ਰਵਾਨਗੀ (pravangi) : Approval process for your models/domain objects without commiting the changes to the records}
+  spec.description   = %q{ਪ੍ਰਵਾਨਗੀ (manzoori) : Approval process for your models/domain objects without commiting the changes to the records}
+  spec.summary       = %q{ਪ੍ਰਵਾਨਗੀ (manzoori) : Approval process for your models/domain objects without commiting the changes to the records}
   spec.homepage      = "http://metawarelabs.com"
   spec.license       = "MIT"
 

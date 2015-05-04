@@ -1,6 +1,6 @@
 require 'active_record'
 
-module Pravangi
+module Manzoori
   class PendingApproval < ::ActiveRecord::Base
 
     belongs_to :resource, polymorphic: true
@@ -34,8 +34,8 @@ module Pravangi
     end
 
     def skip_attributes
-      if self.resource.class.pravangi_options[:skip_attributes]
-        object_changes.except(*self.resource.class.pravangi_options[:skip_attributes])
+      if self.resource.class.manzoori_options[:skip_attributes]
+        object_changes.except(*self.resource.class.manzoori_options[:skip_attributes])
       end
     end
 

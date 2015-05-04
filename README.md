@@ -1,18 +1,18 @@
-# Pravangi (ਪ੍ਰਵਾਨਗੀ) [![Build Status](https://travis-ci.org/metaware/pravangi.svg?branch=master)](https://travis-ci.org/metaware/pravangi) [![Code Climate](https://codeclimate.com/github/metaware/pravangi/badges/gpa.svg)](https://codeclimate.com/github/metaware/pravangi)
+# Manzoori (ਮੰਜੂਰੀ) [![Build Status](https://travis-ci.org/metaware/manzoori.svg?branch=master)](https://travis-ci.org/metaware/manzoori) [![Code Climate](https://codeclimate.com/github/metaware/manzoori/badges/gpa.svg)](https://codeclimate.com/github/metaware/manzoori)
 
-ਪ੍ਰਵਾਨਗੀ (pravangi) : Let's you add an approval process on top of your models/objects. Assume you have an object which is in an `approved` state, you want any subsequent changes to this model to go into a review queue and have someone review these changes until they are actually committed to the object.
+ਮੰਜੂਰੀ (manzoori) : Let's you add an approval process on top of your models/objects. Assume you have an object which is in an `approved` state, you want any subsequent changes to this model to go into a review queue and have someone review these changes until they are actually committed to the object.
 
 ## Installation
 
 ### Rails 3 & 4
 
-1. Add pravangi to your `Gemfile`.
+1. Add `manzoori` to your `Gemfile`.
 
-    `gem 'pravangi'`
+    `gem 'manzoori'`
 
 2. Generate a migration which will add a `pending_approvals` table to your database.
 
-    `bundle exec rails generate pravangi:install`
+    `bundle exec rails generate manzoori:install`
 
 3. Run the migration.
 
