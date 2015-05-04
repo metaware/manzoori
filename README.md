@@ -31,7 +31,9 @@ end
 
 # check if this object requires any approval?
 article.pending_approval?
+```
 
+```ruby
 # require approval when changed
 article = Article.new(title: 'The Illuminati')
 article.save
