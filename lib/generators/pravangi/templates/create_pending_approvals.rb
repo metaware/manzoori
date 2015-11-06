@@ -4,6 +4,9 @@ class CreatePendingApprovals < ActiveRecord::Migration
       t.string   :resource_type,     null: false
       t.integer  :resource_id,       null: false
       t.text     :object_changes
+      t.string   :association_type
+      t.integer  :deleted_id
+      t.string   :change_type
       t.text     :raw_object,        null: false
       t.boolean  :is_approved,       null: false, default: false
       t.boolean  :is_rejected,       null: false, default: false
