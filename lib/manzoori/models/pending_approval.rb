@@ -8,6 +8,12 @@ module Manzoori
     before_save :skip_attributes
 
     default_scope { where(is_approved: false, is_rejected: false) }
+    scope :changes, -> { where(change_type: 'object_changes')}
+    scope :association_changes, -> { where.not(change_type: 'object_changes')}
+    scope :new_added, -> { where(change_type: 'associated_added')}
+    scope :deleted, -> { where(change_type: 'associated_deleted')}
+
+
 
     def as_object
       @object ||= YAML.load(raw_object)
@@ -20,12 +26,22 @@ module Manzoori
     def approve_changes
       PendingApproval.transaction do
         resource.skip_approval = true
-        object_changes.each do |k,v|
-          resource[k] = v[1]
+        if change_type == 'object_change'
+          object_changes.each do |k,v|
+            resource[k] = v[1]
+          end
+        elsif change_type == 'associated_added'
+          resource.send(association_type.underscore.pluralize).build(YAML.load(raw_object).attributes)
+
+        elsif change_type == 'associated_deleted'
+          object = association_type.constantize.find deleted_id
+          object.destroy
         end
+
         self.update_attribute(:is_approved, true)
         resource.save
         resource.reload
+        resource.skip_approval = false
       end
     end
 

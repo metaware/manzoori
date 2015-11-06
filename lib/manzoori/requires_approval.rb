@@ -15,7 +15,7 @@ module Manzoori
         class_attribute :manzoori_options
         self.manzoori_options = options.dup
 
-        attr_accessor :skip_approval
+        cattr_accessor :skip_approval
 
         class_eval do 
           def should_track_approval?
@@ -25,7 +25,40 @@ module Manzoori
 
         before_update :track_approval, if: :should_track_approval?
 
-        has_many :pending_approvals, 
+        associations = Hash(self.manzoori_options[:associations])
+        associations.each do |association, options|
+          klass = self.new.send(association).class_name.safe_constantize
+          klass.send(:cattr_accessor, :associated_to)
+          klass.associated_to = options[:belongs_to] || self.class_name.underscore
+          klass.send(:before_create,
+                     lambda {|object|
+                       return true if object.send(associated_to).skip_approval
+                       object.send(associated_to).pending_approvals.build(
+                         raw_object: object.to_yaml,
+                         change_type: 'associated_added',
+                         association_type: object.class.to_s
+                       ).save
+                       return false;
+                     })
+
+          klass.send(:after_destroy,
+                     lambda {|object|
+                       return true if object.send(associated_to).skip_approval
+                       copy = object.dup
+                       copy.send(associated_to).skip_approval = true
+                       copy.save
+                       copy.send(associated_to).skip_approval = false
+                       product = object.send(associated_to)
+                       product.pending_approvals << Manzoori::PendingApproval.new(
+                         raw_object: copy.to_yaml,
+                         change_type: 'associated_deleted',
+                         association_type: copy.class.to_s,
+                         deleted_id: copy.id
+                       )
+                       product.save
+                     })
+        end
+        has_many :pending_approvals,
           lambda { order('id ASC') },
           class_name: 'Manzoori::PendingApproval',
           as: :resource
@@ -43,7 +76,8 @@ module Manzoori
         original = self.clone
         original.pending_approvals.build(
           object_changes: original.manzoori_object_changes,
-          raw_object: original.to_yaml
+          raw_object: original.to_yaml,
+          change_type: 'object_changes'
           ).save
         self.reload
 
@@ -52,6 +86,7 @@ module Manzoori
           self[attr] = original[attr]
         end
       end
+
     end
 
     def pending_approval?
