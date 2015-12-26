@@ -19,7 +19,7 @@
 
 require 'active_record'
 require 'manzoori'
-require 'generators/pravangi/templates/create_pending_approvals'
+require 'generators/manzoori/templates/create_pending_approvals'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

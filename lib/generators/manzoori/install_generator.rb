@@ -8,7 +8,7 @@ module Manzoori
     source_root File.expand_path('../templates', __FILE__)
 
     def create_migration_file
-      add_pravangi_versions_migration('create_pending_approvals')
+      add_manzoori_versions_migration('create_pending_approvals')
     end
 
     def self.next_migration_number(dirname)
@@ -16,7 +16,7 @@ module Manzoori
     end
 
     protected
-    def add_pravangi_versions_migration(template)
+    def add_manzoori_versions_migration(template)
       migration_dir = File.expand_path('db/migrate')
 
       unless self.class.migration_exists?(migration_dir, template)

@@ -3,7 +3,7 @@ require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
 
 task :console do
-  exec "irb -r pravangi -I ./lib"
+  exec "irb -r manzoori -I ./lib"
 end
 
 task default: :spec
