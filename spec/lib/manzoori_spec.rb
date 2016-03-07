@@ -43,7 +43,7 @@ describe Manzoori do
       requires_approval if: :approved?, 
         manzoori_history: :object_diff,
         skip_attributes: [:updated_at, :created_at],
-        tracked_methods: :author_name
+        tracked_methods: [:author_name, :author_compact_name]
 
       def approved?
         self.state == 'approved'
@@ -51,6 +51,10 @@ describe Manzoori do
 
       def author_name
         "#{author.first_name} #{author.last_name}" if author.present?
+      end
+
+      def author_compact_name
+        "#{author.first_name[0]}. #{author.last_name}" if author.present?
       end
 
     end
@@ -86,7 +90,8 @@ describe Manzoori do
       it "should be able to track changes in method values too" do
         expect(post.manzoori_history).to eq({
           author_id:   ["1", "2"],
-          author_name: ["Jasdeep Singh", "Manpreet Singh"]
+          author_name: ["Jasdeep Singh", "Manpreet Singh"],
+          author_compact_name: ["J. Singh", "M. Singh"]
         }.with_indifferent_access)
       end
     end
@@ -104,6 +109,7 @@ describe Manzoori do
         expect(post.manzoori_history).to eq({
           author_id: ["3", "4"],
           author_name: ["Jasdeep Singh", "Manpreet Singh"],
+          author_compact_name: ["J. Singh", "M. Singh"],
           title: ["metaware", "Lets use some Elixir"]
         }.with_indifferent_access)
       end
@@ -122,6 +128,7 @@ describe Manzoori do
         expect(post.manzoori_history).to eq({
           author_id: ["5", "9"],
           author_name: ["Jasdeep Singh", "Terry Doe"],
+          author_compact_name: ["J. Singh", "T. Doe"],
           title: ["metaware", "Terry Doe was here"]
         }.with_indifferent_access)
       end
