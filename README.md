@@ -26,7 +26,10 @@ When you declare `requires_approval` in your model, you get these methods:
 
 ```ruby
 class Article < ActiveRecord::Base
-  requires_approval   # you can pass various options here
+  requires_approval if: :approved?, 
+    manzoori_history: :object_diff,
+    skip_attributes: [:updated_at, :created_at],
+    tracked_methods: :author_name
 end
 
 # check if this object requires any approval?

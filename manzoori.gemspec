@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Manzoori::VERSION
   spec.authors       = ["Jasdeep Singh"]
   spec.email         = ["narang.jasdeep@gmail.com"]
-  spec.description   = %q{ਪ੍ਰਵਾਨਗੀ (manzoori) : Approval process for your models/domain objects without commiting the changes to the records}
-  spec.summary       = %q{ਪ੍ਰਵਾਨਗੀ (manzoori) : Approval process for your models/domain objects without commiting the changes to the records}
+  spec.description   = %q{ਮੰਜੂਰੀ (manzoori) : Approval process for your models/domain objects without commiting the changes to the records}
+  spec.summary       = %q{ਮੰਜੂਰੀ (manzoori) : Approval process for your models/domain objects without commiting the changes to the records}
   spec.homepage      = "http://metawarelabs.com"
   spec.license       = "MIT"
 

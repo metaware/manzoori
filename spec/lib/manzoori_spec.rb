@@ -11,10 +11,19 @@ describe Manzoori do
       })
 
     ActiveRecord::Schema.define do
+      create_table :authors do |table|
+        table.column :first_name, :string
+        table.column :last_name, :string
+        table.column :created_at, :datetime
+        table.column :updated_at, :datetime        
+      end
+
       create_table :posts do |table|
         table.column :title, :string
         table.column :body, :string
         table.column :state, :string
+        table.column :object_diff, :text
+        table.column :author_id, :text
         table.column :created_at, :datetime
         table.column :updated_at, :datetime
       end
@@ -22,12 +31,28 @@ describe Manzoori do
       CreatePendingApprovals.new.change
     end
 
+    class Author < ActiveRecord::Base
+      has_many :posts
+    end
+
     class Post < ActiveRecord::Base
-      requires_approval if: :approved?, skip_attributes: :updated_at
+      belongs_to :author
+
+      attr_accessor :published
+
+      requires_approval if: :approved?, 
+        manzoori_history: :object_diff,
+        skip_attributes: [:updated_at, :created_at],
+        tracked_methods: :author_name
 
       def approved?
         self.state == 'approved'
       end
+
+      def author_name
+        "#{author.first_name} #{author.last_name}" if author.present?
+      end
+
     end
 
   end
@@ -42,6 +67,65 @@ describe Manzoori do
 
     it 'record there are no pending approvals required' do
       expect(post.pending_approvals).to be_empty
+    end
+
+  end
+
+  context "can handle method changes too" do
+
+    let(:jasdeep)  { Author.create!(first_name: "Jasdeep", last_name: "Singh") }
+    let(:manpreet) { Author.create!(first_name: "Manpreet", last_name: "Singh") }
+    let(:post) { Post.create(title: 'metaware', state: 'approved', author: jasdeep) }
+
+    context "simple" do
+      before(:each) do
+        post.author = manpreet
+        post.save
+      end
+
+      it "should be able to track changes in method values too" do
+        expect(post.manzoori_history).to eq({
+          author_id:   ["1", "2"],
+          author_name: ["Jasdeep Singh", "Manpreet Singh"]
+        }.with_indifferent_access)
+      end
+    end
+
+    context "complex" do
+
+      before(:each) do
+        post.author = manpreet
+        post.title = "Metaware Labs Inc"
+        post.title = "Lets use some Elixir"
+      end
+
+      it "should be able to track method along with attributes" do
+        post.save
+        expect(post.manzoori_history).to eq({
+          author_id: ["3", "4"],
+          author_name: ["Jasdeep Singh", "Manpreet Singh"],
+          title: ["metaware", "Lets use some Elixir"]
+        }.with_indifferent_access)
+      end
+
+      it "tracks only the first and the last change" do
+        john = Author.create(first_name: "John", last_name: "Doe")
+        jerry = Author.create(first_name: "Jerry", last_name: "Doe")
+        terry = Author.create(first_name: "Terry", last_name: "Doe")
+        post.author = john
+        post.title = "John Doe was here"
+        post.author = jerry
+        post.title = "Jerry Doe was here"
+        post.author = terry
+        post.title = "Terry Doe was here"
+        post.save
+        expect(post.manzoori_history).to eq({
+          author_id: ["5", "9"],
+          author_name: ["Jasdeep Singh", "Terry Doe"],
+          title: ["metaware", "Terry Doe was here"]
+        }.with_indifferent_access)
+      end
+
     end
 
   end
@@ -63,6 +147,19 @@ describe Manzoori do
 
       it 'should not update or change after saving' do
         expect(post.title).to eq('metaware')
+      end
+
+      it 'should leave a key in manzoori_history when single attribute is changed' do
+        expect(post.manzoori_history).to eq({ title: ["metaware", "new metaware"] }.with_indifferent_access)
+      end
+
+      it 'should leave multiple keys in manzoori_history when mutliple attributes are changed' do
+        post.body = "Something new!"
+        post.save
+        expect(post.manzoori_history).to eq({ 
+          title: ["metaware", "new metaware"],
+          body: [nil, "Something new!"]
+        }.with_indifferent_access)
       end
 
       it 'should prepare a trail of pending approvals' do
@@ -138,6 +235,16 @@ describe Manzoori do
         post.pending_approvals.each(&:approve_changes)
         post.reload
         expect(post.title).to eq('metaware 3')
+      end
+
+      it 'should know of only the latest change' do
+        post.title = "metaware labs"
+        post.save
+        post.title = "Metaware Labs Inc"
+        post.save
+        expect(post.manzoori_history).to eq({
+          title: ["metaware", "Metaware Labs Inc"]
+        }.with_indifferent_access)
       end
 
     end
