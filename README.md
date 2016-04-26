@@ -1,4 +1,4 @@
-# Manzoori (ਮੰਜੂਰੀ) [![Build Status](https://travis-ci.org/metaware/manzoori.svg?branch=master)](https://travis-ci.org/metaware/manzoori) [![Code Climate](https://codeclimate.com/github/metaware/pravangi/badges/gpa.svg)](https://codeclimate.com/github/metaware/manzoori)
+# Manzoori (ਮੰਜੂਰੀ) [![Build Status](https://travis-ci.org/metaware/manzoori.svg?branch=master)](https://travis-ci.org/metaware/manzoori) [![Code Climate](https://codeclimate.com/github/metaware/manzoori/badges/gpa.svg)](https://codeclimate.com/github/metaware/manzoori)
 
 ਮੰਜੂਰੀ (manzoori) : Let's you add an approval process on top of your models/objects. Assume you have an object which is in an `approved` state, you want any subsequent changes to this model to go into a review queue and have someone review these changes until they are actually committed to the object.
 
