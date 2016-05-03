@@ -344,7 +344,7 @@ describe Manzoori do
       post.updated_at = post.updated_at + 1.hour
       post.save
       post.reload
-      expect(post.updated_at).to eq(original_updated_at + 1.hour)
+      expect(post.updated_at.to_s).to eq((original_updated_at + 1.hour).to_s)
     end
 
     it 'should not track the skipped attributes' do
